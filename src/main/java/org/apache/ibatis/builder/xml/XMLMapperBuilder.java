@@ -90,6 +90,7 @@ public class XMLMapperBuilder extends BaseBuilder {
     this.resource = resource;
   }
 
+  // mapper.xml文件解析
   public void parse() {
     if (!configuration.isResourceLoaded(resource)) {
       configurationElement(parser.evalNode("/mapper"));

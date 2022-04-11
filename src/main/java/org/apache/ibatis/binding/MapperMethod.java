@@ -139,8 +139,10 @@ public class MapperMethod {
 
   private <E> Object executeForMany(SqlSession sqlSession, Object[] args) {
     List<E> result;
+    // 参数处理 包括@Param
     Object param = method.convertArgsToSqlCommandParam(args);
     if (method.hasRowBounds()) {
+      // 分页处理
       RowBounds rowBounds = method.extractRowBounds(args);
       result = sqlSession.selectList(command.getName(), param, rowBounds);
     } else {

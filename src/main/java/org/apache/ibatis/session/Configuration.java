@@ -679,6 +679,7 @@ public class Configuration {
 
   public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
     StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+    // 通过插件代理StatementHandler
     statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
     return statementHandler;
   }
@@ -690,6 +691,7 @@ public class Configuration {
   public Executor newExecutor(Transaction transaction, ExecutorType executorType) {
     executorType = executorType == null ? defaultExecutorType : executorType;
     executorType = executorType == null ? ExecutorType.SIMPLE : executorType;
+    // 采用策略模式返回对应的执行器 简单 重用 批量
     Executor executor;
     if (ExecutorType.BATCH == executorType) {
       executor = new BatchExecutor(this, transaction);
@@ -701,6 +703,7 @@ public class Configuration {
     if (cacheEnabled) {
       executor = new CachingExecutor(executor);
     }
+    // 拦截链路对执行器进行插件处理
     executor = (Executor) interceptorChain.pluginAll(executor);
     return executor;
   }
